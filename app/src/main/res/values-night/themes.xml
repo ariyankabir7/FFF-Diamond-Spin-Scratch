@@ -3,6 +3,7 @@
     <style name="Base.Theme.FFFDiamondSpin" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:fontFamily">@font/gff_medium</item>
     </style>
     <style name="TransparentDialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

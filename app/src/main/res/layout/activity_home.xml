@@ -38,16 +38,15 @@
                 android:layout_marginEnd="@dimen/_45sdp"
                 android:text="FFF DIAMOND SPIN TOOLS"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_16sdp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/daily"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="@dimen/_120sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:src="@drawable/daily"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,8 +100,8 @@
         <ImageView
             android:id="@+id/shareus"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_100sdp"
-            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="10dp"
             android:src="@drawable/shareus"
             app:layout_constraintEnd_toEndOf="parent"
