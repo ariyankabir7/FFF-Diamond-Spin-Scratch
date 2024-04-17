@@ -129,6 +129,10 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this, "You have claimed today daily Bonus!", Toast.LENGTH_SHORT).show()
             }
         }
+        binding.showDiamond.setOnClickListener {
+            val intent = Intent(this, RedeemActivity::class.java)
+            startActivity(intent)
+        }
         binding.diamondspin.setOnClickListener {
             val intent = Intent(this, DiamondSpinActivity::class.java)
             startActivity(intent)
