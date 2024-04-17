@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RedeemActivity"
+    android:background="@drawable/bg">
+    <include
+        android:id="@+id/include"
+        layout="@layout/header_design"/>
+
+    <LinearLayout
+        android:id="@+id/l2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/include">
+
+        <ImageView
+            android:id="@+id/d499"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="@dimen/_130sdp"
+            android:src="@drawable/diamond499"/>
+        <ImageView
+            android:id="@+id/d799"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_130sdp"
+            android:src="@drawable/diamond799"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/l2">
+
+        <ImageView
+            android:id="@+id/d999"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_weight="1"
+            android:src="@drawable/diamond999" />
+
+        <ImageView
+            android:id="@+id/d1499"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_weight="1"
+            android:src="@drawable/diamond1499" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

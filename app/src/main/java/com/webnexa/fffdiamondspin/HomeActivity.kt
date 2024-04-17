@@ -33,13 +33,12 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val currentDate = LocalDate.now()
+        window.statusBarColor = resources.getColor(R.color.app_color)
+
 
         val sharedPreferences = getSharedPreferences("FFFDaimondSpin", MODE_PRIVATE)
         val myEdit = sharedPreferences.edit()
 
-        myEdit.putString("date", "");
-        myEdit.commit();
 
 
 
@@ -134,6 +133,14 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, DiamondSpinActivity::class.java)
             startActivity(intent)
         }
+        binding.rankspin.setOnClickListener {
+            val intent = Intent(this, RankActivity::class.java)
+            startActivity(intent)
+        }
+        binding.diamondscratch.setOnClickListener {
+            val intent = Intent(this, ScratchActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showPpopupDialog() {
@@ -150,6 +157,11 @@ class HomeActivity : AppCompatActivity() {
                     finish()
                 }
             }
+
+    }
+
+    override fun onBackPressed() {
+        showPpopupDialog()
 
     }
 

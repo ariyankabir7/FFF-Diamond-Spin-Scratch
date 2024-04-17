@@ -20,11 +20,20 @@
             android:layout_marginStart="@dimen/_10ssp"
             android:src="@drawable/back" />
         <TextView
+            android:id="@+id/h1st"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Diamond Spin"
+            android:text="Diamond"
             android:textColor="@color/white"
             android:layout_marginStart="@dimen/_20sdp"
+            android:textSize="@dimen/_19ssp"/>
+        <TextView
+            android:id="@+id/h2st"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spin"
+            android:textColor="#FFFD25"
+            android:layout_marginStart="@dimen/_5sdp"
             android:textSize="@dimen/_19ssp"/>
 
     </LinearLayout>

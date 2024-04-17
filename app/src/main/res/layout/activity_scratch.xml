@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DiamondSpinActivity"
+    tools:context=".ScratchActivity"
     android:background="@drawable/bg">
-    <include
-        android:id="@+id/included"
+
+    <include android:id="@+id/include"
         layout="@layout/header_design"/>
 
     <LinearLayout
@@ -19,7 +19,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/included"
+        app:layout_constraintTop_toBottomOf="@+id/include"
         tools:layout_editor_absoluteX="26dp">
 
         <Space
@@ -54,34 +54,31 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/iv_diamondSpin"
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_250sdp"
-        android:src="@drawable/diamondspinwheel"
+    <com.anupkumarpanwar.scratchview.ScratchView
+        android:id="@+id/scratch_view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:overlay_height="300dp"
         android:layout_marginTop="@dimen/_50sdp"
+        app:overlay_image="@drawable/screencard"
+        app:overlay_width="300dp"
+        app:tile_mode="CLAMP" />
+
+
+    <com.cooltechworks.views.ScratchTextView
+        android:id="@+id/scratchImageView"
+        android:layout_width="@dimen/_200sdp"
+        android:visibility="gone"
+        android:layout_height="@dimen/_200sdp"
+        android:gravity="center|end"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
-    <LinearLayout
-        android:id="@+id/spin_btn"
-        android:layout_width="@dimen/_150sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:background="@drawable/diamond_number_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/_40sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_diamondSpin">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:gravity="center"
-            android:text="Spin"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_18ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

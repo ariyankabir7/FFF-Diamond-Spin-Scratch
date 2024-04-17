@@ -12,16 +12,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.webnexa.fffdiamondspin.databinding.ActivityDiamondSpinBinding
+import com.bumptech.glide.Glide
+import com.webnexa.fffdiamondspin.databinding.ActivityHomeBinding
+import com.webnexa.fffdiamondspin.databinding.ActivityRankBinding
 
-class DiamondSpinActivity : AppCompatActivity() {
-    lateinit var binding: ActivityDiamondSpinBinding
-    private var currentAngle = 0f
-    private var isSpinning = false
+class RankActivity : AppCompatActivity() {
+    lateinit var binding: ActivityRankBinding
+   var isSpinning=false
     lateinit var anglelist: List<Float>
-    lateinit var anglevalue: List<String>
+    lateinit var anglevalue: List<Int>
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityDiamondSpinBinding.inflate(layoutInflater)
+        binding=ActivityRankBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -34,15 +35,16 @@ class DiamondSpinActivity : AppCompatActivity() {
         }
         window.statusBarColor = resources.getColor(R.color.app_color)
 
-        binding.included.back.setOnClickListener {
-            finish()
-        }
+        binding.included.h1st.text="Rank"
+        binding.included.back.setOnClickListener { finish() }
+        anglelist = listOf(120f, 190f, 240f, 0f)
+        anglevalue = listOf(R.drawable.diamond1, R.drawable.platinium,R.drawable.gold,R.drawable.bronze)
+
+
+
         binding.linearLayout3.setOnClickListener {
             startActivity(Intent(this, RedeemActivity::class.java))
         }
-        anglelist = listOf(120f, 190f, 240f, 0f)
-        anglevalue = listOf("12", "14", "7", "0")
-
         binding.spinBtn.setOnClickListener {
 
             if (!isSpinning) {
@@ -58,38 +60,42 @@ class DiamondSpinActivity : AppCompatActivity() {
                         isSpinning = false
                         var randomIndex = anglelist.indices.random()
                         var randomAngle = anglelist[randomIndex]
-                        if (binding.ivDiamondSpin.rotation < randomAngle) {
+                        if (binding.ivDiamondSpin.rotation<randomAngle){
                             binding.ivDiamondSpin.rotation = randomAngle
-                        } else {
+                        }else{
                             randomIndex = anglelist.indices.random()
                             randomAngle = anglelist[randomIndex]
-                            if (binding.ivDiamondSpin.rotation < randomAngle) {
+                            if (binding.ivDiamondSpin.rotation<randomAngle){
                                 binding.ivDiamondSpin.rotation = randomAngle
-                            } else {
+                            }else{
                                 randomIndex = anglelist.indices.random()
                                 randomAngle = anglelist[randomIndex]
                                 binding.ivDiamondSpin.rotation = randomAngle
-
-
-                                val customLayout = LayoutInflater.from(this@DiamondSpinActivity)
-                                    .inflate(R.layout.diamond_popup, null)
-
-                                val textView: TextView = customLayout.findViewById(R.id.diamond_text)
-                                val image: ImageView = customLayout.findViewById(R.id.imageView)
-                                textView.text = anglevalue[randomIndex]
-
-                                // Create AlertDialog with custom layout
-                                val builder = AlertDialog.Builder(this@DiamondSpinActivity, R.style.TransparentDialogTheme)
-                                builder.setView(customLayout)
-                                builder.setCancelable(false)
-
-                                val alertDialog = builder.create()
-                                alertDialog.show()
-
-                                image.setOnClickListener {
-                                    alertDialog.dismiss()
-                                }
                             }
+                        }
+
+                        val customLayout = LayoutInflater.from(this@RankActivity)
+                            .inflate(R.layout.rank_popup, null)
+
+                        val image: ImageView = customLayout.findViewById(R.id.rankImage)
+                        val imageView: ImageView = customLayout.findViewById(R.id.imageView)
+
+                        Glide
+                            .with(this@RankActivity)
+                            .load( anglevalue[randomIndex])
+                            .centerCrop()
+                            .placeholder(R.drawable.loading_image)
+                            .into(image);
+                        // Create AlertDialog with custom layout
+                        val builder = AlertDialog.Builder(this@RankActivity, R.style.TransparentDialogTheme)
+                        builder.setView(customLayout)
+                        builder.setCancelable(false)
+
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+
+                        imageView.setOnClickListener {
+                            alertDialog.dismiss()
                         }
 
                     }
@@ -97,6 +103,6 @@ class DiamondSpinActivity : AppCompatActivity() {
                 timer.start()
             }
         }
-    }
 
+    }
 }
