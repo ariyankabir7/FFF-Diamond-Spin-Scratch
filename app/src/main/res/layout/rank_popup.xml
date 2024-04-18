@@ -7,20 +7,23 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/diamondpopup" />
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
+        android:src="@drawable/diamondpopup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
         android:id="@+id/rankImage"
         android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_55sdp"
-        android:src="@drawable/diamond_icon"
         android:layout_marginTop="@dimen/_60sdp"
-        android:layout_marginStart="-20sp"
+        android:src="@drawable/diamond_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
 

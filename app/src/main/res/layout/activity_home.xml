@@ -50,14 +50,15 @@
 
             <LinearLayout
                 android:id="@+id/showDiamond"
-                android:layout_width="@dimen/_100sdp"
+                android:layout_width="@dimen/_110sdp"
                 android:layout_height="@dimen/_25sdp"
-                android:layout_marginStart="-20dp"
+                android:layout_marginStart="-17dp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:background="@drawable/diamond_number_bg">
 
                 <TextView
+                    android:id="@+id/d"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"

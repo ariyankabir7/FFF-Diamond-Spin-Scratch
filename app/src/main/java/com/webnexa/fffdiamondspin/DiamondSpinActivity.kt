@@ -2,6 +2,7 @@ package com.webnexa.fffdiamondspin
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
@@ -20,6 +21,8 @@ class DiamondSpinActivity : AppCompatActivity() {
     private var isSpinning = false
     lateinit var anglelist: List<Float>
     lateinit var anglevalue: List<String>
+    var dslimit = 0
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDiamondSpinBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -34,6 +37,14 @@ class DiamondSpinActivity : AppCompatActivity() {
         }
         window.statusBarColor = resources.getColor(R.color.app_color)
 
+        sharedPreferences = getSharedPreferences("FFFDaimondSpin", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        dslimit = sharedPreferences.getInt("dspinlimit", 0)
+
+        binding.d.text = sharedPreferences.getString("diamond", "0")
+
+
         binding.included.back.setOnClickListener {
             finish()
         }
@@ -45,57 +56,81 @@ class DiamondSpinActivity : AppCompatActivity() {
 
         binding.spinBtn.setOnClickListener {
 
-            if (!isSpinning) {
-                isSpinning = true
+            if (dslimit > 0) {
+                if (!isSpinning) {
+                    isSpinning = true
 
 
-                val timer = object : CountDownTimer(3000, 15) {
-                    override fun onTick(millisUntilFinished: Long) {
-                        binding.ivDiamondSpin.rotation += 19f
-                    }
+                    val timer = object : CountDownTimer(3000, 15) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            binding.ivDiamondSpin.rotation += 25f
+                        }
 
-                    override fun onFinish() {
-                        isSpinning = false
-                        var randomIndex = anglelist.indices.random()
-                        var randomAngle = anglelist[randomIndex]
-                        if (binding.ivDiamondSpin.rotation < randomAngle) {
-                            binding.ivDiamondSpin.rotation = randomAngle
-                        } else {
-                            randomIndex = anglelist.indices.random()
-                            randomAngle = anglelist[randomIndex]
+                        override fun onFinish() {
+                            isSpinning = false
+                            var randomIndex = anglelist.indices.random()
+                            var randomAngle = anglelist[randomIndex]
                             if (binding.ivDiamondSpin.rotation < randomAngle) {
                                 binding.ivDiamondSpin.rotation = randomAngle
                             } else {
                                 randomIndex = anglelist.indices.random()
                                 randomAngle = anglelist[randomIndex]
-                                binding.ivDiamondSpin.rotation = randomAngle
+                                if (binding.ivDiamondSpin.rotation < randomAngle) {
+                                    binding.ivDiamondSpin.rotation = randomAngle
+                                } else {
+                                    randomIndex = anglelist.indices.random()
+                                    randomAngle = anglelist[randomIndex]
+                                    binding.ivDiamondSpin.rotation = randomAngle
 
 
-                                val customLayout = LayoutInflater.from(this@DiamondSpinActivity)
-                                    .inflate(R.layout.diamond_popup, null)
+                                    val customLayout = LayoutInflater.from(this@DiamondSpinActivity)
+                                        .inflate(R.layout.diamond_popup, null)
 
-                                val textView: TextView = customLayout.findViewById(R.id.diamond_text)
-                                val image: ImageView = customLayout.findViewById(R.id.imageView)
-                                textView.text = anglevalue[randomIndex]
+                                    val textView: TextView =
+                                        customLayout.findViewById(R.id.diamond_text)
+                                    val image: ImageView = customLayout.findViewById(R.id.imageView)
+                                    textView.text = anglevalue[randomIndex]
 
-                                // Create AlertDialog with custom layout
-                                val builder = AlertDialog.Builder(this@DiamondSpinActivity, R.style.TransparentDialogTheme)
-                                builder.setView(customLayout)
-                                builder.setCancelable(false)
+                                    // Create AlertDialog with custom layout
+                                    val builder = AlertDialog.Builder(
+                                        this@DiamondSpinActivity,
+                                        R.style.TransparentDialogTheme
+                                    )
+                                    builder.setView(customLayout)
+                                    builder.setCancelable(false)
 
-                                val alertDialog = builder.create()
-                                alertDialog.show()
+                                    val alertDialog = builder.create()
+                                    alertDialog.show()
 
-                                image.setOnClickListener {
-                                    alertDialog.dismiss()
+                                    image.setOnClickListener {
+                                        alertDialog.dismiss()
+                                        dslimit -= 1
+
+                                        val currentText = textView.text.toString()
+                                        val currentNumber = currentText.toIntOrNull() ?: 0 // Convert current text to an integer, default to 0 if conversion fails
+                                        val diamondCount = sharedPreferences.getString("diamond", "0")
+                                                ?.toIntOrNull() ?: 0
+
+
+                                        val sum = currentNumber + diamondCount
+                                        binding.d.text = sum.toString()
+
+                                        editor.putString("diamond", sum.toString())
+                                        editor.putInt("dspinlimit", dslimit)
+                                        editor.apply()
+                                    }
                                 }
                             }
-                        }
 
+                        }
                     }
+                    timer.start()
                 }
-                timer.start()
+            } else {
+                Toast.makeText(this, "Todays Limit Ends !", Toast.LENGTH_SHORT).show()
             }
+
+
         }
     }
 

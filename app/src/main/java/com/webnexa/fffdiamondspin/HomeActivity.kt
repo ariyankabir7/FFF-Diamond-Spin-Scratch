@@ -1,9 +1,14 @@
 package com.webnexa.fffdiamondspin
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -15,11 +20,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import com.webnexa.fffdiamondspin.databinding.ActivityHomeBinding
 import java.time.LocalDate
-import java.util.Date
 
 
 class HomeActivity : AppCompatActivity() {
     lateinit var binding: ActivityHomeBinding
+    private lateinit var sharedPreferences: SharedPreferences
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -36,122 +41,106 @@ class HomeActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.app_color)
 
 
-        val sharedPreferences = getSharedPreferences("FFFDaimondSpin", MODE_PRIVATE)
-        val myEdit = sharedPreferences.edit()
+
+        sharedPreferences = getSharedPreferences("FFFDaimondSpin", Context.MODE_PRIVATE)
+        sharedPreferences.edit()
+
+        val currentDate = LocalDate.now()
+        val storedDateStr = sharedPreferences.getString("date", "")
+
+       // sharedPreferences.edit().clear().apply()
+
+        if (storedDateStr != currentDate.toString()) {
+            with(sharedPreferences.edit()) {
+                putInt("dspinlimit", 10)
+                putInt("sscratchlimit", 10)
+                putInt("rspinlimit", 3)
+                apply()
 
 
+            }
+        }
 
+        binding.d.text = sharedPreferences.getString("diamond", "0")
 
+        // Handle menu clicks
         binding.menu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
+
         binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.shared -> {
-
-                    val shareIntent = Intent(Intent.ACTION_SEND)
-                    shareIntent.type = "text/plain"
-                    val appLink = "https://play.google.com/store/apps/details?id=$packageName"
-                    val shareMessage =
-                        "This is FFF Diamond Spin Tool App :\n$appLink"
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-                    startActivity(Intent.createChooser(shareIntent, "Share app via"))
+                    shareApp()
                     true
                 }
-
                 R.id.rate -> {
-
-                    startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-                        )
-                    )
+                    rateApp()
                     true
                 }
-
                 R.id.privacy -> {
-                    startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://www.google.com")
-                        )
-                    )
+                    openPrivacyPolicy()
                     true
                 }
-
                 R.id.exit -> {
-                    showPpopupDialog()
+                    showPopupDialog()
                     true
                 }
-
-                else -> {
-                    false
-                }
+                else -> false
             }
         }
+
         binding.rateus.setOnClickListener {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-                )
-            )
+            rateApp()
         }
+
         binding.shareus.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            val appLink = "https://play.google.com/store/apps/details?id=$packageName"
-            val shareMessage =
-                "This is FFF Diamond Spin Tool App :\n$appLink"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, "Share app via"))
+            shareApp()
         }
+
         binding.daily.setOnClickListener {
-
-            val currentDate = LocalDate.now()
-
-            val storedDateStr = sharedPreferences.getString("date", "")
-
-            val storedDate = if (storedDateStr?.isNotEmpty() == true) {
-                LocalDate.parse(storedDateStr)
-            } else {
-                null
-            }
-
-            if (storedDate != null && storedDate == currentDate) {
-
-                Toast.makeText(this, "You have already claimed today daily Bonus!", Toast.LENGTH_SHORT).show()
-            } else {
-                val editor = sharedPreferences.edit()
-                editor.putString("date", currentDate.toString())
-                editor.apply()
-                Toast.makeText(this, "You have claimed today daily Bonus!", Toast.LENGTH_SHORT).show()
-            }
+            claimDailyBonus(currentDate.toString())
         }
+
+        // Handle other button clicks
         binding.showDiamond.setOnClickListener {
-            val intent = Intent(this, RedeemActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RedeemActivity::class.java))
         }
         binding.diamondspin.setOnClickListener {
-            val intent = Intent(this, DiamondSpinActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, DiamondSpinActivity::class.java))
         }
         binding.rankspin.setOnClickListener {
-            val intent = Intent(this, RankActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RankActivity::class.java))
         }
         binding.diamondscratch.setOnClickListener {
-            val intent = Intent(this, ScratchActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ScratchActivity::class.java))
         }
     }
 
-    private fun showPpopupDialog() {
-        AlertDialog.Builder(this, R.style.TransparentDialogTheme).setView(R.layout.back_popup)
-            .setCancelable(true).create().apply {
-                show()
+    private fun shareApp() {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        val appLink = "https://play.google.com/store/apps/details?id=$packageName"
+        val shareMessage = "This is FFF Diamond Spin Tool App:\n$appLink"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+        startActivity(Intent.createChooser(shareIntent, "Share app via"))
+    }
 
+    private fun rateApp() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+    }
+
+    private fun openPrivacyPolicy() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com")))
+    }
+
+    private fun showPopupDialog() {
+        AlertDialog.Builder(this, R.style.TransparentDialogTheme)
+            .setView(R.layout.back_popup)
+            .setCancelable(true)
+            .create()
+            .apply {
+                show()
                 findViewById<MaterialButton>(R.id.buttonCancel)?.setOnClickListener {
                     dismiss()
                 }
@@ -161,12 +150,50 @@ class HomeActivity : AppCompatActivity() {
                     finish()
                 }
             }
+    }
 
+    private fun claimDailyBonus(currentDateStr: String) {
+        val storedDateStr = sharedPreferences.getString("date", "")
+        if (storedDateStr != currentDateStr) {
+            val editor = sharedPreferences.edit()
+            editor.putString("date", currentDateStr)
+            editor.putString("diamond", "25") // Assuming the daily bonus is always 25 diamonds
+            editor.apply()
+
+            val customLayout = LayoutInflater.from(this)
+                .inflate(R.layout.diamond_popup, null)
+
+            val textView: TextView = customLayout.findViewById(R.id.diamond_text)
+            val image: ImageView = customLayout.findViewById(R.id.imageView)
+            textView.text = "25"
+
+            val builder = AlertDialog.Builder(this, R.style.TransparentDialogTheme)
+            builder.setView(customLayout)
+            builder.setCancelable(false)
+
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            image.setOnClickListener {
+                alertDialog.dismiss()
+                binding.d.text = "25" // Update UI with the new diamond count
+            }
+        } else {
+            Toast.makeText(
+                this,
+                "You have already claimed today's daily bonus!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onBackPressed() {
-        showPpopupDialog()
 
+        showPopupDialog()
     }
 
+    override fun onResume() {
+        binding.d.text=sharedPreferences.getString("diamond","0")
+        super.onResume()
+    }
 }

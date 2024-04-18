@@ -1,7 +1,9 @@
 package com.webnexa.fffdiamondspin
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -20,6 +22,8 @@ class ScratchActivity : AppCompatActivity() {
     lateinit var binding: ActivityScratchBinding
     var isScratching = false
     private lateinit var anglevalue:List<String>
+    private lateinit var sharedPreferences: SharedPreferences
+    var slimit=0
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityScratchBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -33,6 +37,12 @@ class ScratchActivity : AppCompatActivity() {
             insets
         }
         window.statusBarColor = resources.getColor(R.color.app_color)
+
+        sharedPreferences = getSharedPreferences("FFFDaimondSpin", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        binding.d.text = sharedPreferences.getString("diamond", "0")
+        slimit = sharedPreferences.getInt("sscratchlimit", 0)
 
         binding.include.back.setOnClickListener { finish() }
         binding.include.h1st.text = "Scratch"
@@ -51,39 +61,58 @@ class ScratchActivity : AppCompatActivity() {
             }
 
             override fun onRevealPercentChangedListener(p0: ScratchView?, percent: Float) {
+                if(slimit>0){
 
-                if (percent > 0.32 && !isScratching) {
-                    isScratching = true
-                    Handler().postDelayed({
-                       binding.scratchView.reveal()
-                        Toast.makeText(this@ScratchActivity, "Reveal Complete", Toast.LENGTH_SHORT)
-                            .show()
-                        isScratching = false
+                    if (percent > 0.32 && !isScratching) {
+                        isScratching = true
+                        Handler().postDelayed({
+                            binding.scratchView.reveal()
 
-                        val customLayout = LayoutInflater.from(this@ScratchActivity)
-                            .inflate(R.layout.diamond_popup, null)
+                            isScratching = false
 
-                        val textView: TextView = customLayout.findViewById(R.id.diamond_text)
-                        val image: ImageView = customLayout.findViewById(R.id.imageView)
-                        textView.text = anglevalue.random()
+                            val customLayout = LayoutInflater.from(this@ScratchActivity)
+                                .inflate(R.layout.diamond_popup, null)
 
-                        // Create AlertDialog with custom layout
-                        val builder = AlertDialog.Builder(this@ScratchActivity, R.style.TransparentDialogTheme)
-                        builder.setView(customLayout)
-                        builder.setCancelable(false)
+                            val textView: TextView = customLayout.findViewById(R.id.diamond_text)
+                            val image: ImageView = customLayout.findViewById(R.id.imageView)
+                            textView.text = anglevalue.random()
 
-                        val alertDialog = builder.create()
-                        alertDialog.show()
+                            // Create AlertDialog with custom layout
+                            val builder = AlertDialog.Builder(this@ScratchActivity, R.style.TransparentDialogTheme)
+                            builder.setView(customLayout)
+                            builder.setCancelable(false)
 
-                        image.setOnClickListener {
-                            alertDialog.dismiss()
-                            binding.scratchView.mask()
-                        }
+                            val alertDialog = builder.create()
+                            alertDialog.show()
+
+                            image.setOnClickListener {
+                                alertDialog.dismiss()
+                                binding.scratchView.mask()
+                                slimit -= 1
+
+                                val currentText = textView.text.toString()
+                                val currentNumber = currentText.toIntOrNull() ?: 0 // Convert current text to an integer, default to 0 if conversion fails
+                                val diamondCount = sharedPreferences.getString("diamond", "0")
+                                    ?.toIntOrNull() ?: 0
 
 
-                    }, 1500)
+                                val sum = currentNumber + diamondCount
+                                binding.d.text = sum.toString()
 
+                                editor.putString("diamond", sum.toString())
+                                editor.putInt("dspinlimit", slimit)
+                                editor.apply()
+                            }
+
+
+                        }, 1500)
+
+                    }
+                }else{
+                    Toast.makeText(this@ScratchActivity, "Today Limit Ends !", Toast.LENGTH_SHORT).show()
                 }
+
+
             }
         })
     }

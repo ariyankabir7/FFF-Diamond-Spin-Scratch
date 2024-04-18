@@ -11,6 +11,50 @@
         android:id="@+id/include"
         layout="@layout/header_design"/>
 
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="26dp"
+        app:layout_constraintTop_toTopOf="@id/include">
+
+        <Space
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="1dp" />
+
+        <ImageView
+            android:layout_width="@dimen/_55sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="1"
+            android:elevation="2dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/diamond_icon" />
+
+        <LinearLayout
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginStart="-25dp"
+            android:layout_weight="1"
+            android:background="@drawable/diamond_number_bg">
+
+            <TextView
+                android:id="@+id/d"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/l2"
         android:layout_width="match_parent"
