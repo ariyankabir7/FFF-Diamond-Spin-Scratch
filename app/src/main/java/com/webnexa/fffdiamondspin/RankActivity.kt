@@ -58,7 +58,6 @@ class RankActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("FFFDaimondSpin", Context.MODE_PRIVATE)
         sharedPreferences.edit()
 
-        binding.d.text = sharedPreferences.getString("diamond", "0")
 
         binding.included.h1st.text = "Rank"
         binding.included.back.setOnClickListener { finish() }
@@ -66,11 +65,6 @@ class RankActivity : AppCompatActivity() {
         anglevalue =
             listOf(R.drawable.diamond1, R.drawable.platinium, R.drawable.gold, R.drawable.bronze)
 
-
-
-        binding.linearLayout3.setOnClickListener {
-            startActivity(Intent(this, RedeemActivity::class.java))
-        }
         binding.spinBtn.setOnClickListener {
 
             if (!isSpinning) {

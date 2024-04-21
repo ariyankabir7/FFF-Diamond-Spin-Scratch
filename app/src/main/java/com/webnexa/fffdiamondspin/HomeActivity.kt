@@ -155,9 +155,12 @@ class HomeActivity : AppCompatActivity() {
     private fun claimDailyBonus(currentDateStr: String) {
         val storedDateStr = sharedPreferences.getString("date", "")
         if (storedDateStr != currentDateStr) {
+
+            val diamond = sharedPreferences.getString("diamond", "0")
+            val add=diamond+25
             val editor = sharedPreferences.edit()
             editor.putString("date", currentDateStr)
-            editor.putString("diamond", "25") // Assuming the daily bonus is always 25 diamonds
+            editor.putString("diamond", add) // Assuming the daily bonus is always 25 diamonds
             editor.apply()
 
             val customLayout = LayoutInflater.from(this)
